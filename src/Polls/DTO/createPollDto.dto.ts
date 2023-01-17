@@ -9,10 +9,7 @@ export class createPollDto{
     @Length(5,50)
     topic:string;
 
-    @IsInt()
-    @Min(1)
-    @Max(7)
-    votesPervoter : number;
+    
  
     @IsString()
     @Length(2,25)

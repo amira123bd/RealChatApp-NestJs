@@ -1,5 +1,5 @@
 
-/*import { createPollEntity } from "src/Polls/Entities/createpollEntity.entity";
+import { createPollEntity } from "src/Polls/Entities/createpollEntity.entity";
 import { Column, Entity,ManyToOne,PrimaryColumn } from "typeorm";
 
 
@@ -16,7 +16,7 @@ export class nominationsEntity {
     userID:string;
 
     @Column()
-    text: number;
+    nomination: string;
 
     @Column()
     vote: number=0;
@@ -24,13 +24,8 @@ export class nominationsEntity {
     @ManyToOne(
         type => createPollEntity,
         (poll) => poll.nominations,
-        {
-          cascade: ['insert', 'update'],
-          nullable: true,
-          eager: true
-        }
-      )
+       )
       poll: createPollEntity;
 
 
-}*/
+}

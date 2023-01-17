@@ -1,4 +1,4 @@
-/*import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollsModule } from 'src/Polls/polls.module';
@@ -18,4 +18,3 @@ import { NominationsService } from './nominations.service';
       providers: [NominationsService],
 })
 export class NominationsModule {}
-*/

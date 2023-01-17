@@ -42,7 +42,7 @@ async getPolls() :Promise<createPollEntity[]>{
 
 
  // create a poll       
-async createPoll({topic,votesPervoter, name }: createPollDto) {
+async createPoll({topic,name }: createPollDto) {
 
          const userID=createUserID();
          const PollID=createPollID();
@@ -50,7 +50,6 @@ async createPoll({topic,votesPervoter, name }: createPollDto) {
             const Newpoll = {
                 id:PollID,
                 topic,
-                votesPervoter,
                 userID:userID,
                 AdminID: userID,
                 hasStarted:false
@@ -95,7 +94,7 @@ async joinPoll({PollID,name}:joinPollDto)
 
     if(!joinedPoll)
     {throw new NotFoundException(`le poll d'id ${PollID} n'existe pas!!`)}
-   const {topic,votesPervoter,AdminID}=joinedPoll;
+   const {topic,AdminID}=joinedPoll;
    
     const JoinedPoll={
       PollID,
@@ -169,6 +168,8 @@ return this.poll;
 
 async addParticipant(pollID: string,userID: string):Promise<POLL[]>{
   
+
+  console.log("addddd participant")
 const index=await this.poll.findIndex((p)=>p.id===pollID)
 console.log(index);
 
@@ -208,7 +209,20 @@ return this.poll;
 
   }
 
- 
 
+  //start voting
+
+  async startPoll(PollID:string){
+   
+    const index=await this.poll.findIndex((p)=>p.id===PollID)
+    if(index>=0){
+        this.poll[index].hasStarted=true;
+    }else
+    {throw new NotFoundException(`le poll d'id ${PollID} n'existe pas!!!!!`)}
+    
+  }
+
+ 
+ 
 
 }

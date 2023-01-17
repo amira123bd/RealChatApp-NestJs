@@ -1,5 +1,6 @@
 import { Controller, ParseIntPipe, Post } from '@nestjs/common';
 import { Body, Delete, Get, Param, Req, UseGuards } from '@nestjs/common/decorators';
+import { GatewayAdminGuard } from './admin-auth.guard';
 import { ControllerAuthGuard } from './co-auth.guard';
 
 import { createPollDto } from './DTO/createPollDto.dto';
@@ -74,7 +75,14 @@ async rejoin(@Req() request: RequestWithAuth) {
 
 
 
-
+//start voting 
+@UseGuards(GatewayAdminGuard)
+@Post('startvote:pollid')
+async start(
+@Param('pollid') pollid:string
+){
+  return this.pollsService.startPoll(pollid);
+}
     
     
    

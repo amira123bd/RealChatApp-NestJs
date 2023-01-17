@@ -1,6 +1,6 @@
 import { IsEmpty } from "class-validator";
 import { isEmpty } from "rxjs";
-//import { nominationsEntity } from "src/nominations/nomination.entity";
+import { nominationsEntity } from "src/nominations/nomination.entity";
 import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity('create')
@@ -12,8 +12,7 @@ export class createPollEntity {
     @Column()
     topic:string;
 
-    @Column()
-    votesPervoter : number;
+   
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
@@ -28,7 +27,7 @@ export class createPollEntity {
     @Column()
     hasStarted:boolean;
 
-    /*@OneToMany(
+    @OneToMany(
         type => nominationsEntity,
         (nomination) => nomination.poll,
         {
@@ -36,7 +35,7 @@ export class createPollEntity {
           cascade: true
         }
       )
-      nominations: nominationsEntity[];*/
+      nominations: nominationsEntity[];
 
 
 }
