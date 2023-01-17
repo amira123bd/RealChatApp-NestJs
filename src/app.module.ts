@@ -5,9 +5,9 @@ import {createPollEntity } from 'src/Polls/Entities/createpollEntity.entity'
 
 
 import { PollsModule } from './Polls/polls.module';
-import { VoteModule } from './vote/vote.module';
 import * as dotenv from 'dotenv';
 import { jwtModule } from 'modules.config';
+
 
 
 dotenv.config();
@@ -20,12 +20,12 @@ dotenv.config();
       port: 3307,
       username: 'root',
       password: '',
-      database: 'testpoll',
+      database: 'poll_vote',
       entities: [createPollEntity],
       synchronize: true,
       logging: true
     }),
-    VoteModule,jwtModule],
+    jwtModule],
   controllers: [],
   providers: [],
 })

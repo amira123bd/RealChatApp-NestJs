@@ -1,5 +1,5 @@
 import { Controller, ParseIntPipe, Post } from '@nestjs/common';
-import { Body, Get, Param, Req, UseGuards } from '@nestjs/common/decorators';
+import { Body, Delete, Get, Param, Req, UseGuards } from '@nestjs/common/decorators';
 import { ControllerAuthGuard } from './co-auth.guard';
 
 import { createPollDto } from './DTO/createPollDto.dto';
@@ -32,6 +32,8 @@ export class PollsController {
   }
 
 
+
+
     // get all polls
     @Get('getpoll')
     async getpoll(
@@ -48,6 +50,15 @@ export class PollsController {
         return await this.pollsService.getPoll(id);
      }
 
+
+
+@Delete('delete')
+async deleteparticipant(
+    @Body() {PollID,userID}
+)     
+{
+    const result =await this.pollsService.removeParticipant(PollID,userID)
+}
 
 // rejoin a poll
 

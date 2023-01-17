@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { jwtModule } from 'modules.config';
@@ -7,15 +7,19 @@ import { PollsController } from './polls.controller';
 import { PollsGateway } from './polls.gateway';
 import { PollsService } from './polls.service';
 
+//@Global()
 @Module({
   imports: [ConfigModule.forRoot(),
     TypeOrmModule.forFeature(
-      [createPollEntity ]
-      ),jwtModule],
+      [createPollEntity]),jwtModule],
 
   controllers: [PollsController],
   
-  providers: [PollsService,PollsGateway],
+  providers: [PollsGateway,PollsService],
+
+  exports:[PollsService]
+
+ 
 })
 export class PollsModule {
 

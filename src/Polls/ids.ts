@@ -9,7 +9,7 @@ export const createUserID=()=>nanoid();
 export const createNominationID=()=>nanoid(8);
 
 // guard types
-type AuthPayload = {
+export type AuthPayload = {
     userID: string;
     pollID: string;
     name: string;

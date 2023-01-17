@@ -2,7 +2,7 @@ import { Column, Entity } from "typeorm";
 @Entity()
 export class rejoinPollEntity {
     @Column()
-    PollID:number;
+    PollID:string;
  
     @Column()
     name:string;

@@ -5,17 +5,15 @@ import { Repository } from 'typeorm';
 import { createPollDto } from './DTO/createPollDto.dto';
 import { joinPollDto } from './DTO/joinPollDto.dto';
 import { createPollEntity } from './Entities/createpollEntity.entity';
-import { joinPollEntity } from './Entities/joinPollEntity.entity';
-import { rejoinPollEntity } from './Entities/rejoinPollEntity.entity';
 import {  createUserID,createPollID } from './ids';
-import { Participants } from './participants';
+import { POLL} from './POLL';
 
 
 
 @Injectable()
 export class PollsService {
 
-  private readonly participants: Participants[] = [];
+  private readonly poll: POLL[] = [];
     constructor(
         @InjectRepository(createPollEntity)
         private pollRepository: Repository<createPollEntity>,
@@ -44,12 +42,7 @@ async getPolls() :Promise<createPollEntity[]>{
 
 
  // create a poll       
-async createPoll({
-            
-            topic,
-            votesPervoter,
-            name
-          }: createPollDto) {
+async createPoll({topic,votesPervoter, name }: createPollDto) {
 
          const userID=createUserID();
          const PollID=createPollID();
@@ -60,10 +53,18 @@ async createPoll({
                 votesPervoter,
                 userID:userID,
                 AdminID: userID,
+                hasStarted:false
               };
+        
 
        const createdPoll= await this.pollRepository.save(Newpoll);
-
+       
+       const participants:string[]=[userID];
+       
+       //creation de poll suivant pollID
+       this.poll.push({...Newpoll,participants});
+       console.log(this.poll)
+      
 //jwt auth
         const signedString = this.jwtService.sign(
           {
@@ -79,7 +80,8 @@ async createPoll({
           poll: createdPoll,
           accessToken: signedString,
         };
-            
+
+      
 
           }
 
@@ -90,18 +92,21 @@ async joinPoll({PollID,name}:joinPollDto)
 {    
     const userID=createUserID();
     const joinedPoll= await this.pollRepository.findOne({ where: { id:PollID} });
+
     if(!joinedPoll)
     {throw new NotFoundException(`le poll d'id ${PollID} n'existe pas!!`)}
-   const {topic,votesPervoter}=joinedPoll;
+   const {topic,votesPervoter,AdminID}=joinedPoll;
    
     const JoinedPoll={
       PollID,
       name,
       userID
     }
-
-    this.participants.push({...JoinedPoll,topic,votesPervoter})
-    console.log(this.participants);
+     // add the participant to the POLL
+    
+    this.addParticipant(PollID,userID);
+   
+   
 
     //jwt auth
     const signedString = this.jwtService.sign(
@@ -119,6 +124,8 @@ async joinPoll({PollID,name}:joinPollDto)
       accessToken: signedString,
     };
 
+    console.log(this.poll);
+
 }
 
 // rejoin a poll
@@ -133,11 +140,73 @@ async rejoinPoll(pollID:string) {
   return joinedPoll;
 }
 
+//remove participant
+async removeParticipant(pollID: string,userID: string,):Promise<POLL[]>
+{
+  const index=await this.poll.findIndex((p)=>p.id===pollID)
 
+  if(index>=0){
+    const participantToRemove=await this.poll[index].participants.findIndex((part)=>part===userID);
+
+    if(participantToRemove){
+      await this.poll[index].participants.splice(participantToRemove,1);
+    }
+    else
+  {throw new NotFoundException(`le participant d'id  ${userID} n'existe pas!!!!!`)}
+  } 
+
+  else
+  {throw new NotFoundException(`le poll d'id ${pollID} n'existe pas!!!!!`)}
+
+  console.log(this.poll);
+return this.poll;
+
+
+}
+
+
+//add participant
+
+async addParticipant(pollID: string,userID: string):Promise<POLL[]>{
+  
+const index=await this.poll.findIndex((p)=>p.id===pollID)
+console.log(index);
+
+if(index>=0){
+  await this.poll[index].participants.push(userID);
+}
+else
+{throw new NotFoundException(`le poll d'id ${pollID} n'existe pas!!!!!`)}
+
+console.log(this.poll)
+return this.poll;
+  }
  
+ 
+  //get participant
 
-         
+  async getParticipant(pollID:string,userID:string):Promise<number>{
 
+    const index=await this.poll.findIndex((p)=>p.id===pollID)
+
+  if(index>=0){
+    const participantIndex=await this.poll[index].participants.findIndex((part)=>part===userID);
+
+    if(participantIndex>=0){
+      return participantIndex
+      
+    }
+    else
+  {throw new NotFoundException(`le participant d'id  ${userID} n'existe pas!!!!!`)}
+  } 
+
+  else
+  {throw new NotFoundException(`le poll d'id ${pollID} n'existe pas!!!!!`)}
+
+
+
+
+  }
 
  
 

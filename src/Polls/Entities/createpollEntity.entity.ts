@@ -1,14 +1,11 @@
 import { IsEmpty } from "class-validator";
 import { isEmpty } from "rxjs";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
-
-
-
+//import { nominationsEntity } from "src/nominations/nomination.entity";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity('create')
 export class createPollEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id:string;
 
 
@@ -27,6 +24,19 @@ export class createPollEntity {
 
     @Column()
     AdminID:string;
+
+    @Column()
+    hasStarted:boolean;
+
+    /*@OneToMany(
+        type => nominationsEntity,
+        (nomination) => nomination.poll,
+        {
+          nullable: true,
+          cascade: true
+        }
+      )
+      nominations: nominationsEntity[];*/
 
 
 }
