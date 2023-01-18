@@ -34,7 +34,7 @@ export class NominationsService {
                 console.log(participant)
                 console.log({id,userID,nomination})
 
-                return await this.nomRepository.save({id,userID,vote:0,pollID:pollID,nomination});
+                return await this.nomRepository.save({id,userID,vote:0,pollid:pollID,nomination});
                 
             }
             throw new NotFoundException(`You are not a participant`);
@@ -51,6 +51,8 @@ export class NominationsService {
             return await this.nomRepository.delete(nominationid);
 
          } 
+         
+
          
          
 /// vote on nomination 
